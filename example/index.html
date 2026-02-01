@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StreamSlice Widget - Example</title>
+  <title>Widget - Example</title>
   <style>
     * {
       margin: 0;
@@ -123,29 +123,29 @@
 </head>
 <body>
   <div class="container">
-    <h1>StreamSlice Widget</h1>
-    <p class="subtitle">Example: подключение библиотеки</p>
+    <h1>Widget</h1>
+    <p class="subtitle">Example: Library Integration</p>
 
     <div class="card">
-      <h2>Настройки</h2>
+      <h2>Settings</h2>
       <div class="form-row">
         <div class="form-group">
           <label>API URL</label>
           <input type="text" id="apiUrl" value="http://localhost:8080">
         </div>
         <div class="form-group">
-          <label>Тема</label>
+          <label>Theme</label>
           <select id="theme">
-            <option value="dark">Тёмная</option>
-            <option value="light">Светлая</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
           </select>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <h2>Управление</h2>
-      <button class="btn btn-primary" id="initBtn">Инициализировать</button>
+      <h2>Controls</h2>
+      <button class="btn btn-primary" id="initBtn">Initialize</button>
       <button class="btn btn-secondary" id="playBtn">Play</button>
       <button class="btn btn-secondary" id="pauseBtn">Pause</button>
       <button class="btn btn-secondary" id="muteBtn">Mute</button>
@@ -155,27 +155,27 @@
     </div>
 
     <div class="card">
-      <h2>Лог событий</h2>
+      <h2>Event Log</h2>
       <div class="log" id="log"></div>
     </div>
 
     <div class="card">
-      <h2>Контент страницы</h2>
+      <h2>Page Content</h2>
       <div class="content-placeholder">
-        <p>Ваш контент здесь</p>
-        <p>Виджет будет плавать поверх страницы</p>
+        <p>Your content here</p>
+        <p>The widget will float above the page</p>
       </div>
     </div>
   </div>
 
-  <!-- Подключаем собранную библиотеку -->
+  <!-- Include the built library -->
   <script src="../dist/streamslice.js"></script>
   
   <script>
-    // Переменная для хранения экземпляра виджета
+    // Variable to store widget instance
     let widget = null;
 
-    // Функция логирования
+    // Logging function
     function log(message, type = 'info') {
       const logEl = document.getElementById('log');
       const entry = document.createElement('div');
@@ -185,100 +185,100 @@
       logEl.scrollTop = logEl.scrollHeight;
     }
 
-    // Инициализация виджета
+    // Initialize widget
     document.getElementById('initBtn').addEventListener('click', async () => {
       if (widget) {
-        log('Виджет уже инициализирован', 'error');
+        log('Widget already initialized', 'error');
         return;
       }
 
       const apiUrl = document.getElementById('apiUrl').value;
       const theme = document.getElementById('theme').value;
 
-      log(`Инициализация виджета... API: ${apiUrl}`);
+      log(`Initializing widget... API: ${apiUrl}`);
 
-      // Создаём экземпляр StreamSlice (UMD: StreamSlice.StreamSlice)
+      // Create StreamSlice instance (UMD: StreamSlice.StreamSlice)
       widget = new StreamSlice.StreamSlice({
         apiUrl: apiUrl,
         theme: theme,
         autoPlay: true,
-        muted: true, // Для автовоспроизведения нужен muted
+        muted: true, // Required for autoplay
         position: { x: window.innerWidth - 440, y: 20 },
         size: { width: 420, height: 300 },
         
         // Callbacks
         onReady: () => {
-          log('Виджет готов к воспроизведению', 'success');
+          log('Widget ready for playback', 'success');
         },
         onPlay: () => {
-          log('Воспроизведение началось');
+          log('Playback started');
         },
         onPause: () => {
-          log('Воспроизведение на паузе');
+          log('Playback paused');
         },
         onError: (error) => {
-          log(`Ошибка: ${error.code} - ${error.message}`, 'error');
+          log(`Error: ${error.code} - ${error.message}`, 'error');
         },
         onClose: () => {
-          log('Виджет закрыт');
+          log('Widget closed');
           widget = null;
         },
         onResize: (size) => {
-          log(`Размер изменён: ${size.width}x${size.height}`);
+          log(`Resized: ${size.width}x${size.height}`);
         },
         onMove: (pos) => {
-          log(`Позиция: ${pos.x}, ${pos.y}`);
+          log(`Position: ${pos.x}, ${pos.y}`);
         }
       });
 
       try {
         await widget.init();
-        log('Виджет инициализирован!', 'success');
+        log('Widget initialized!', 'success');
       } catch (error) {
-        log(`Ошибка инициализации: ${error.message}`, 'error');
+        log(`Initialization error: ${error.message}`, 'error');
       }
     });
 
-    // Управление воспроизведением
+    // Playback controls
     document.getElementById('playBtn').addEventListener('click', () => {
-      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      if (!widget) return log('Initialize widget first', 'error');
       widget.play();
       log('Play');
     });
 
     document.getElementById('pauseBtn').addEventListener('click', () => {
-      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      if (!widget) return log('Initialize widget first', 'error');
       widget.pause();
       log('Pause');
     });
 
     document.getElementById('muteBtn').addEventListener('click', () => {
-      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      if (!widget) return log('Initialize widget first', 'error');
       widget.toggleMute();
       log('Mute toggled');
     });
 
     document.getElementById('showBtn').addEventListener('click', () => {
-      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      if (!widget) return log('Initialize widget first', 'error');
       widget.show();
       log('Widget shown');
     });
 
     document.getElementById('hideBtn').addEventListener('click', () => {
-      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      if (!widget) return log('Initialize widget first', 'error');
       widget.hide();
       log('Widget hidden');
     });
 
     document.getElementById('destroyBtn').addEventListener('click', () => {
-      if (!widget) return log('Виджет не инициализирован', 'error');
+      if (!widget) return log('Widget not initialized', 'error');
       widget.destroy();
       widget = null;
-      log('Виджет уничтожен', 'success');
+      log('Widget destroyed', 'success');
     });
 
-    // Начальное сообщение
-    log('Страница загружена. Нажмите "Инициализировать" для запуска виджета.');
+    // Initial message
+    log('Page loaded. Click "Initialize" to start the widget.');
   </script>
 </body>
 </html>

@@ -1,41 +1,39 @@
-# StreamSlice Widget
+# Widget
 
-Библиотека для встраивания плавающего видеоплеера со стримом Amazon IVS на любой сайт.
+A floating video player library for embedding live streams on any website.
 
-## Возможности
+## Features
 
-- Плавающее окно с возможностью перетаскивания и изменения размера
-- Интеграция с Amazon IVS Player для HLS стримов
-- Автоматическое получение плейлиста по URL страницы
-- Управление воспроизведением (play/pause, громкость, качество, полноэкранный режим)
-- Темная и светлая темы
-- TypeScript поддержка
-- Легковесный и без внешних зависимостей (кроме IVS SDK)
+- Draggable and resizable floating window
+- Automatic playlist fetching by page URL
+- Playback controls (play/pause, volume, quality, fullscreen)
+- Dark and light themes
+- TypeScript support
 
-## Установка
+## Installation
 
 ### NPM
 
 ```bash
-npm install streamslice-widget
+npm install @streamslice/widget
 ```
 
 ### CDN
 
 ```html
-<!-- Amazon IVS Player SDK (загружается автоматически, но можно подключить вручную) -->
-<script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
+<!-- Minified (recommended for production) -->
+<script src="https://unpkg.com/@streamslice/widget"></script>
 
-<!-- StreamSlice Widget -->
-<script src="https://your-cdn.com/streamslice.js"></script>
+<!-- Or via jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/@streamslice/widget"></script>
 ```
 
-## Использование
+## Usage
 
 ### ES Modules
 
 ```typescript
-import { StreamSlice } from 'streamslice-widget';
+import { StreamSlice } from '@streamslice/widget';
 
 const widget = new StreamSlice({
   apiUrl: 'https://api.your-backend.com',
@@ -46,14 +44,14 @@ const widget = new StreamSlice({
   onError: (error) => console.error('Error:', error),
 });
 
-// Инициализация виджета
+// Initialize widget
 widget.init();
 ```
 
 ### UMD (Browser)
 
 ```html
-<script src="streamslice.js"></script>
+<script src="https://unpkg.com/streamslice-widget"></script>
 <script>
   const widget = new StreamSlice.StreamSlice({
     apiUrl: 'https://api.your-backend.com',
@@ -64,76 +62,76 @@ widget.init();
 </script>
 ```
 
-## Конфигурация
+## Configuration
 
-| Параметр | Тип | По умолчанию | Описание |
-|----------|-----|--------------|----------|
-| `apiUrl` | `string` | **required** | URL API сервера |
-| `position` | `{ x: number, y: number }` | `{ x: 20, y: 20 }` | Начальная позиция окна |
-| `size` | `{ width: number, height: number }` | `{ width: 400, height: 280 }` | Начальный размер окна |
-| `minSize` | `{ width: number, height: number }` | `{ width: 320, height: 220 }` | Минимальный размер окна |
-| `maxSize` | `{ width: number, height: number }` | `{ width: 800, height: 600 }` | Максимальный размер окна |
-| `autoPlay` | `boolean` | `true` | Автозапуск воспроизведения |
-| `muted` | `boolean` | `false` | Начать с выключенным звуком |
-| `volume` | `number` | `1` | Начальная громкость (0-1) |
-| `showControls` | `boolean` | `true` | Показывать элементы управления |
-| `zIndex` | `number` | `999999` | z-index окна |
-| `theme` | `'dark' \| 'light'` | `'dark'` | Цветовая тема |
-| `className` | `string` | - | Дополнительный CSS класс |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `apiUrl` | `string` | **required** | API server URL |
+| `position` | `{ x: number, y: number }` | `{ x: 20, y: 20 }` | Initial window position |
+| `size` | `{ width: number, height: number }` | `{ width: 400, height: 280 }` | Initial window size |
+| `minSize` | `{ width: number, height: number }` | `{ width: 320, height: 220 }` | Minimum window size |
+| `maxSize` | `{ width: number, height: number }` | `{ width: 800, height: 600 }` | Maximum window size |
+| `autoPlay` | `boolean` | `true` | Auto-play when stream loads |
+| `muted` | `boolean` | `false` | Start muted |
+| `volume` | `number` | `1` | Initial volume (0-1) |
+| `showControls` | `boolean` | `true` | Show player controls |
+| `zIndex` | `number` | `999999` | Window z-index |
+| `theme` | `'dark' \| 'light'` | `'dark'` | Color theme |
+| `className` | `string` | - | Additional CSS class |
 
 ### Callbacks
 
-| Callback | Параметры | Описание |
-|----------|-----------|----------|
-| `onReady` | - | Вызывается когда виджет готов к воспроизведению |
-| `onPlay` | - | Вызывается при запуске воспроизведения |
-| `onPause` | - | Вызывается при паузе |
-| `onError` | `{ code: string, message: string }` | Вызывается при ошибке |
-| `onClose` | - | Вызывается при закрытии виджета |
-| `onResize` | `{ width: number, height: number }` | Вызывается при изменении размера |
-| `onMove` | `{ x: number, y: number }` | Вызывается при перемещении |
+| Callback | Parameters | Description |
+|----------|-----------|-------------|
+| `onReady` | - | Called when widget is ready for playback |
+| `onPlay` | - | Called when playback starts |
+| `onPause` | - | Called when playback pauses |
+| `onError` | `{ code: string, message: string }` | Called on error |
+| `onClose` | - | Called when widget is closed |
+| `onResize` | `{ width: number, height: number }` | Called when window is resized |
+| `onMove` | `{ x: number, y: number }` | Called when window is moved |
 
 ## API
 
-### Методы
+### Methods
 
 ```typescript
-// Управление воспроизведением
+// Playback control
 widget.play();
 widget.pause();
 widget.togglePlayPause();
 
-// Громкость
+// Volume
 widget.setVolume(0.5); // 0-1
 widget.getVolume();
 widget.mute();
 widget.unmute();
 widget.toggleMute();
 
-// Качество
+// Quality
 widget.setQuality('720p');
 widget.getQualities(); // ['Auto', '1080p', '720p', '480p', ...]
 
-// Полноэкранный режим
+// Fullscreen
 widget.toggleFullscreen();
 
-// Позиция и размер окна
+// Window position and size
 widget.setPosition({ x: 100, y: 100 });
 widget.setSize({ width: 500, height: 350 });
 
-// Видимость
+// Visibility
 widget.show();
 widget.hide();
 widget.close();
 
-// Состояние
+// State
 widget.isReady(); // boolean
 widget.getState(); // PlayerState
 
-// Уничтожение
+// Cleanup
 widget.destroy();
 
-// Статический метод для удаления стилей
+// Static method to remove injected styles
 StreamSlice.removeStyles();
 ```
 
@@ -154,14 +152,14 @@ interface PlayerState {
 }
 ```
 
-## API Backend
+## Backend API
 
-Библиотека ожидает следующий API эндпоинт:
+The library expects the following API endpoint:
 
 ### GET /api/event/getPlaylist
 
 **Query Parameters:**
-- `link` (string, required) - URL страницы
+- `link` (string, required) - Page URL
 
 **Response:**
 ```json
@@ -184,39 +182,51 @@ interface PlayerState {
 }
 ```
 
-## Сборка
+## Build
 
 ```bash
-# Установка зависимостей
+# Install dependencies
 npm install
 
-# Сборка
+# Build
 npm run build
 
-# Сборка с отслеживанием изменений
+# Build with watch mode
 npm run dev
+
+# Run example server
+npm run serve
 ```
 
-## Структура проекта
+## Output Files
+
+| File | Size | Description |
+|------|------|-------------|
+| `streamslice.js` | ~55 KB | UMD, development |
+| `streamslice.min.js` | ~33 KB | UMD, minified (production) |
+| `streamslice.esm.js` | ~50 KB | ES Modules |
+| `streamslice.esm.min.js` | ~33 KB | ES Modules, minified |
+
+## Project Structure
 
 ```
 src/
-├── index.ts           # Точка входа
-├── StreamSlice.ts     # Главный класс
+├── index.ts           # Entry point
+├── StreamSlice.ts     # Main class
 ├── api/
-│   └── client.ts      # API клиент
+│   └── client.ts      # API client
 ├── player/
-│   └── IVSPlayer.ts   # Обёртка над Amazon IVS Player
+│   └── IVSPlayer.ts   # Amazon IVS Player wrapper
 ├── ui/
-│   ├── FloatingWindow.ts  # Плавающее окно
-│   ├── PlayerControls.ts  # Элементы управления
-│   └── icons.ts           # SVG иконки
+│   ├── FloatingWindow.ts  # Floating window
+│   ├── PlayerControls.ts  # Player controls
+│   └── icons.ts           # SVG icons
 ├── styles/
-│   └── index.ts       # CSS стили
+│   └── index.ts       # CSS styles
 └── types/
-    └── index.ts       # TypeScript типы
+    └── index.ts       # TypeScript types
 ```
 
-## Лицензия
+## License
 
 MIT

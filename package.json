@@ -1,13 +1,13 @@
 {
-  "name": "streamslice-widget",
+  "name": "@streamslice/widget",
   "type": "module",
   "version": "1.0.0",
-  "description": "StreamSlice floating video player widget with Amazon IVS support",
+  "description": "Floating video player widget with Amazon IVS support",
   "main": "dist/streamslice.js",
   "module": "dist/streamslice.esm.js",
   "types": "dist/index.d.ts",
-  "unpkg": "dist/streamslice.js",
-  "jsdelivr": "dist/streamslice.js",
+  "unpkg": "dist/streamslice.min.js",
+  "jsdelivr": "dist/streamslice.min.js",
   "exports": {
     ".": {
       "import": "./dist/streamslice.esm.js",
@@ -31,20 +31,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/streamslice-widget.git"
+    "url": "https://github.com/streamslice/widget.git"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/streamslice-widget#readme",
+  "homepage": "https://github.com/streamslice/widget#readme",
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/streamslice-widget/issues"
+    "url": "https://github.com/streamslice/widget/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
-    "streamslice",
     "video",
     "player",
     "amazon-ivs",
+    "ivs",
     "streaming",
     "widget",
-    "floating-window"
+    "floating-window",
+    "live-stream"
   ],
   "author": "StreamSlice",
   "license": "MIT",
