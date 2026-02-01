@@ -1,0 +1,64 @@
+{
+  "name": "streamslice-widget",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "StreamSlice floating video player widget with Amazon IVS support",
+  "main": "dist/streamslice.js",
+  "module": "dist/streamslice.esm.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/streamslice.js",
+  "jsdelivr": "dist/streamslice.js",
+  "exports": {
+    ".": {
+      "import": "./dist/streamslice.esm.js",
+      "require": "./dist/streamslice.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "dev": "rollup -c -w",
+    "serve": "npx serve .",
+    "example": "npm run build && npx serve .",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/streamslice-widget.git"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/streamslice-widget#readme",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/streamslice-widget/issues"
+  },
+  "keywords": [
+    "streamslice",
+    "video",
+    "player",
+    "amazon-ivs",
+    "streaming",
+    "widget",
+    "floating-window"
+  ],
+  "author": "StreamSlice",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^20.11.0",
+    "rollup": "^4.9.6",
+    "@rollup/plugin-terser": "^0.4.4",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "amazon-ivs-player": "^1.24.0"
+  }
+}

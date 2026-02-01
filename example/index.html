@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamSlice Widget - Example</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .card h2 {
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary { background: #6366f1; color: white; }
+    .btn-primary:hover { background: #4f46e5; }
+    
+    .btn-secondary { background: #e2e8f0; color: #333; }
+    .btn-secondary:hover { background: #cbd5e1; }
+    
+    .btn-danger { background: #ef4444; color: white; }
+    .btn-danger:hover { background: #dc2626; }
+
+    .log {
+      background: #1a1a2e;
+      border-radius: 8px;
+      padding: 16px;
+      height: 180px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .log-entry { color: #a0aec0; margin-bottom: 4px; }
+    .log-entry.success { color: #10b981; }
+    .log-entry.error { color: #ef4444; }
+    .log-entry.info { color: #6366f1; }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .content-placeholder {
+      padding: 60px;
+      text-align: center;
+      border: 2px dashed #e2e8f0;
+      border-radius: 8px;
+      color: #666;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>StreamSlice Widget</h1>
+    <p class="subtitle">Example: подключение библиотеки</p>
+
+    <div class="card">
+      <h2>Настройки</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>API URL</label>
+          <input type="text" id="apiUrl" value="http://localhost:8080">
+        </div>
+        <div class="form-group">
+          <label>Тема</label>
+          <select id="theme">
+            <option value="dark">Тёмная</option>
+            <option value="light">Светлая</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Управление</h2>
+      <button class="btn btn-primary" id="initBtn">Инициализировать</button>
+      <button class="btn btn-secondary" id="playBtn">Play</button>
+      <button class="btn btn-secondary" id="pauseBtn">Pause</button>
+      <button class="btn btn-secondary" id="muteBtn">Mute</button>
+      <button class="btn btn-secondary" id="showBtn">Show</button>
+      <button class="btn btn-secondary" id="hideBtn">Hide</button>
+      <button class="btn btn-danger" id="destroyBtn">Destroy</button>
+    </div>
+
+    <div class="card">
+      <h2>Лог событий</h2>
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="card">
+      <h2>Контент страницы</h2>
+      <div class="content-placeholder">
+        <p>Ваш контент здесь</p>
+        <p>Виджет будет плавать поверх страницы</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Подключаем собранную библиотеку -->
+  <script src="../dist/streamslice.js"></script>
+  
+  <script>
+    // Переменная для хранения экземпляра виджета
+    let widget = null;
+
+    // Функция логирования
+    function log(message, type = 'info') {
+      const logEl = document.getElementById('log');
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logEl.appendChild(entry);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // Инициализация виджета
+    document.getElementById('initBtn').addEventListener('click', async () => {
+      if (widget) {
+        log('Виджет уже инициализирован', 'error');
+        return;
+      }
+
+      const apiUrl = document.getElementById('apiUrl').value;
+      const theme = document.getElementById('theme').value;
+
+      log(`Инициализация виджета... API: ${apiUrl}`);
+
+      // Создаём экземпляр StreamSlice (UMD: StreamSlice.StreamSlice)
+      widget = new StreamSlice.StreamSlice({
+        apiUrl: apiUrl,
+        theme: theme,
+        autoPlay: true,
+        muted: true, // Для автовоспроизведения нужен muted
+        position: { x: window.innerWidth - 440, y: 20 },
+        size: { width: 420, height: 300 },
+        
+        // Callbacks
+        onReady: () => {
+          log('Виджет готов к воспроизведению', 'success');
+        },
+        onPlay: () => {
+          log('Воспроизведение началось');
+        },
+        onPause: () => {
+          log('Воспроизведение на паузе');
+        },
+        onError: (error) => {
+          log(`Ошибка: ${error.code} - ${error.message}`, 'error');
+        },
+        onClose: () => {
+          log('Виджет закрыт');
+          widget = null;
+        },
+        onResize: (size) => {
+          log(`Размер изменён: ${size.width}x${size.height}`);
+        },
+        onMove: (pos) => {
+          log(`Позиция: ${pos.x}, ${pos.y}`);
+        }
+      });
+
+      try {
+        await widget.init();
+        log('Виджет инициализирован!', 'success');
+      } catch (error) {
+        log(`Ошибка инициализации: ${error.message}`, 'error');
+      }
+    });
+
+    // Управление воспроизведением
+    document.getElementById('playBtn').addEventListener('click', () => {
+      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      widget.play();
+      log('Play');
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      widget.pause();
+      log('Pause');
+    });
+
+    document.getElementById('muteBtn').addEventListener('click', () => {
+      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      widget.toggleMute();
+      log('Mute toggled');
+    });
+
+    document.getElementById('showBtn').addEventListener('click', () => {
+      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      widget.show();
+      log('Widget shown');
+    });
+
+    document.getElementById('hideBtn').addEventListener('click', () => {
+      if (!widget) return log('Сначала инициализируйте виджет', 'error');
+      widget.hide();
+      log('Widget hidden');
+    });
+
+    document.getElementById('destroyBtn').addEventListener('click', () => {
+      if (!widget) return log('Виджет не инициализирован', 'error');
+      widget.destroy();
+      widget = null;
+      log('Виджет уничтожен', 'success');
+    });
+
+    // Начальное сообщение
+    log('Страница загружена. Нажмите "Инициализировать" для запуска виджета.');
+  </script>
+</body>
+</html>
