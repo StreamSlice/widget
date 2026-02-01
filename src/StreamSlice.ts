@@ -9,7 +9,10 @@ import { PlayerControls } from './ui/PlayerControls';
 import { IVSPlayerWrapper } from './player/IVSPlayer';
 import { injectStyles, removeStyles } from './styles';
 
-const DEFAULT_CONFIG: Required<Omit<StreamSliceConfig, 'apiUrl' | 'onReady' | 'onPlay' | 'onPause' | 'onError' | 'onClose' | 'onResize' | 'onMove' | 'className'>> = {
+/** API Base URL - hardcoded for security */
+const API_BASE_URL = 'https://platform.stream-slice.com';
+
+const DEFAULT_CONFIG: Required<Omit<StreamSliceConfig, 'onReady' | 'onPlay' | 'onPause' | 'onError' | 'onClose' | 'onResize' | 'onMove' | 'className'>> = {
   position: { x: 20, y: 20 },
   size: { width: 400, height: 280 },
   minSize: { width: 320, height: 220 },
@@ -44,11 +47,7 @@ export class StreamSlice {
     availableQualities: ['Auto'],
   };
 
-  constructor(config: StreamSliceConfig) {
-    if (!config.apiUrl) {
-      throw new Error('StreamSlice: apiUrl is required');
-    }
-
+  constructor(config: StreamSliceConfig = {}) {
     this.config = {
       ...DEFAULT_CONFIG,
       ...config,
@@ -62,7 +61,8 @@ export class StreamSlice {
       className: config.className,
     } as Required<StreamSliceConfig>;
 
-    this.apiClient = new ApiClient(config.apiUrl);
+    // Always use the hardcoded API URL
+    this.apiClient = new ApiClient(API_BASE_URL);
     
     // Set initial player state from config
     this.playerState.volume = this.config.volume;

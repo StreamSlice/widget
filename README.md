@@ -36,7 +36,6 @@ npm install @streamslice/widget
 import { StreamSlice } from '@streamslice/widget';
 
 const widget = new StreamSlice({
-  apiUrl: 'https://api.your-backend.com',
   autoPlay: true,
   muted: false,
   theme: 'dark',
@@ -51,11 +50,11 @@ widget.init();
 ### UMD (Browser)
 
 ```html
-<script src="https://unpkg.com/streamslice-widget"></script>
+<script src="https://unpkg.com/@streamslice/widget"></script>
 <script>
   const widget = new StreamSlice.StreamSlice({
-    apiUrl: 'https://api.your-backend.com',
     autoPlay: true,
+    theme: 'dark',
   });
   
   widget.init();
@@ -66,7 +65,6 @@ widget.init();
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `apiUrl` | `string` | **required** | API server URL |
 | `position` | `{ x: number, y: number }` | `{ x: 20, y: 20 }` | Initial window position |
 | `size` | `{ width: number, height: number }` | `{ width: 400, height: 280 }` | Initial window size |
 | `minSize` | `{ width: number, height: number }` | `{ width: 320, height: 220 }` | Minimum window size |

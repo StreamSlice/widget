@@ -128,19 +128,16 @@
 
     <div class="card">
       <h2>Settings</h2>
-      <div class="form-row">
-        <div class="form-group">
-          <label>API URL</label>
-          <input type="text" id="apiUrl" value="http://localhost:8080">
-        </div>
-        <div class="form-group">
-          <label>Theme</label>
-          <select id="theme">
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-          </select>
-        </div>
+      <div class="form-group">
+        <label>Theme</label>
+        <select id="theme">
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+        </select>
       </div>
+      <p style="color: #666; font-size: 13px; margin-top: 8px;">
+        API: platform.stream-slice.com (hardcoded)
+      </p>
     </div>
 
     <div class="card">
@@ -192,14 +189,12 @@
         return;
       }
 
-      const apiUrl = document.getElementById('apiUrl').value;
       const theme = document.getElementById('theme').value;
 
-      log(`Initializing widget... API: ${apiUrl}`);
+      log('Initializing widget... API: platform.stream-slice.com');
 
       // Create StreamSlice instance (UMD: StreamSlice.StreamSlice)
       widget = new StreamSlice.StreamSlice({
-        apiUrl: apiUrl,
         theme: theme,
         autoPlay: true,
         muted: true, // Required for autoplay

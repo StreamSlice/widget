@@ -3,8 +3,6 @@
  */
 
 export interface StreamSliceConfig {
-  /** API base URL */
-  apiUrl: string;
   /** Initial position of the floating window */
   position?: WindowPosition;
   /** Initial size of the floating window */
