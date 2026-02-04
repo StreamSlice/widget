@@ -11,7 +11,7 @@ export const STYLES = `
   --ss-bg-secondary: #16213e;
   --ss-text: #ffffff;
   --ss-text-secondary: #a0aec0;
-  --ss-border: #2d3748;
+  --ss-border: #003049;
   --ss-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   --ss-radius: 12px;
   --ss-transition: all 0.2s ease;

@@ -148,37 +148,6 @@ interface PlayerState {
   quality: string;
   availableQualities: string[];
 }
-```
-
-## Backend API
-
-The library expects the following API endpoint:
-
-### GET /api/event/getPlaylist
-
-**Query Parameters:**
-- `link` (string, required) - Page URL
-
-**Response:**
-```json
-{
-  "data": {
-    "link": "https://ivs.stream.url/playlist.m3u8"
-  },
-  "error": null
-}
-```
-
-**Error Response:**
-```json
-{
-  "data": null,
-  "error": {
-    "code": "ERROR_CODE",
-    "error_message_message": "Error description"
-  }
-}
-```
 
 ## Build
 
