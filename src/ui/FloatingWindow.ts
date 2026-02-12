@@ -31,6 +31,7 @@ export class FloatingWindow {
   private dragOffset = { x: 0, y: 0 };
   private startPos = { x: 0, y: 0 };
   private startSize = { width: 0, height: 0 };
+  private startWindowPos = { x: 0, y: 0 };
   private currentPosition: WindowPosition;
   private currentSize: WindowSize;
 
@@ -222,54 +223,53 @@ export class FloatingWindow {
     
     this.startPos = { x: e.clientX, y: e.clientY };
     this.startSize = { ...this.currentSize };
+    this.startWindowPos = { ...this.currentPosition };
     
     this.container.style.transition = 'none';
   }
 
   private onResize(e: MouseEvent): void {
     if (!this.isResizing || !this.resizeDirection) return;
-    
+
     e.preventDefault();
-    
+
     const deltaX = e.clientX - this.startPos.x;
     const deltaY = e.clientY - this.startPos.y;
-    
+
     let newWidth = this.startSize.width;
     let newHeight = this.startSize.height;
-    let newX = this.currentPosition.x;
-    let newY = this.currentPosition.y;
-    
+    let newX = this.startWindowPos.x;
+    let newY = this.startWindowPos.y;
+
     // Calculate new dimensions based on resize direction
     if (this.resizeDirection.includes('e')) {
       newWidth = this.startSize.width + deltaX;
     }
     if (this.resizeDirection.includes('w')) {
       newWidth = this.startSize.width - deltaX;
-      newX = this.currentPosition.x + deltaX;
     }
     if (this.resizeDirection.includes('s')) {
       newHeight = this.startSize.height + deltaY;
     }
     if (this.resizeDirection.includes('n')) {
       newHeight = this.startSize.height - deltaY;
-      newY = this.currentPosition.y + deltaY;
     }
-    
+
     // Apply constraints
     newWidth = Math.max(this.options.minSize.width, Math.min(newWidth, this.options.maxSize.width));
     newHeight = Math.max(this.options.minSize.height, Math.min(newHeight, this.options.maxSize.height));
-    
+
     // Adjust position if resizing from left or top
-    if (this.resizeDirection.includes('w') && newWidth !== this.currentSize.width) {
-      newX = this.currentPosition.x + (this.currentSize.width - newWidth);
+    if (this.resizeDirection.includes('w')) {
+      newX = this.startWindowPos.x + (this.startSize.width - newWidth);
     }
-    if (this.resizeDirection.includes('n') && newHeight !== this.currentSize.height) {
-      newY = this.currentPosition.y + (this.currentSize.height - newHeight);
+    if (this.resizeDirection.includes('n')) {
+      newY = this.startWindowPos.y + (this.startSize.height - newHeight);
     }
-    
+
     this.currentSize = { width: newWidth, height: newHeight };
     this.currentPosition = { x: newX, y: newY };
-    
+
     this.container.style.width = `${newWidth}px`;
     this.container.style.height = `${newHeight}px`;
     this.container.style.left = `${newX}px`;
