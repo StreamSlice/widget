@@ -112,6 +112,11 @@ export const STYLES = `
   color: var(--ss-text);
 }
 
+.ss-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .ss-btn-close:hover {
   background: #ef4444;
   color: white;
