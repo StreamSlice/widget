@@ -173,6 +173,7 @@ export class StreamSlice {
       onError: (error) => this.config.onError?.(error),
       onReady: () => {
         this.playerControls?.setEnabled(true);
+        this.applyDefaultQuality();
         this.config.onReady?.();
       },
     });
@@ -210,17 +211,9 @@ export class StreamSlice {
       this.floatingWindow?.showLiveBadge(state.isLive);
     }
     
-    // Update available qualities and apply default quality
+    // Update available qualities
     if (state.availableQualities) {
       this.playerControls?.setAvailableQualities(state.availableQualities);
-
-      // Auto-select 360p as default quality if available
-      if (this.playerState.quality === 'Auto') {
-        const target = state.availableQualities.find(q => q.startsWith('360p'));
-        if (target) {
-          this.setQuality(target);
-        }
-      }
     }
     
     // Trigger callbacks
@@ -230,6 +223,14 @@ export class StreamSlice {
       } else {
         this.config.onPause?.();
       }
+    }
+  }
+
+  private applyDefaultQuality(): void {
+    const qualities = this.player?.getQualities() ?? [];
+    const target = qualities.find(q => q.startsWith('360p'));
+    if (target) {
+      this.setQuality(target);
     }
   }
 
@@ -361,6 +362,7 @@ export class StreamSlice {
    */
   public hide(): void {
     if (this.floatingWindow) {
+      this.player?.pause();
       this.floatingWindow.getContainer().style.display = 'none';
     }
   }
