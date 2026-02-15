@@ -210,9 +210,17 @@ export class StreamSlice {
       this.floatingWindow?.showLiveBadge(state.isLive);
     }
     
-    // Update available qualities
+    // Update available qualities and apply default quality
     if (state.availableQualities) {
       this.playerControls?.setAvailableQualities(state.availableQualities);
+
+      // Auto-select 360p as default quality if available
+      if (this.playerState.quality === 'Auto') {
+        const target = state.availableQualities.find(q => q.startsWith('360p'));
+        if (target) {
+          this.setQuality(target);
+        }
+      }
     }
     
     // Trigger callbacks

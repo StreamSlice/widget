@@ -155,8 +155,9 @@ export class PlayerControls {
     this.fullscreenBtn.innerHTML = this.state.isFullscreen ? Icons.fullscreenExit : Icons.fullscreen;
     this.fullscreenBtn.title = this.state.isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
     
-    // Update quality button
-    this.qualityBtn.innerHTML = `${this.state.quality} ${Icons.chevronDown}`;
+    // Update quality button (show short label without bitrate)
+    const shortQuality = this.state.quality.replace(/\s*\(.*\)/, '');
+    this.qualityBtn.innerHTML = `${shortQuality} ${Icons.chevronDown}`;
   }
 
   public setAvailableQualities(qualities: string[]): void {
@@ -166,14 +167,15 @@ export class PlayerControls {
 
   private renderQualityMenu(): void {
     this.qualityMenu.innerHTML = '';
-    
+
     this.state.availableQualities.forEach(quality => {
       const option = document.createElement('button');
       option.className = 'ss-quality-option';
-      if (quality === this.state.quality) {
+      const isActive = quality === this.state.quality;
+      if (isActive) {
         option.classList.add('ss-active');
       }
-      option.textContent = quality;
+      option.innerHTML = `<span class="ss-quality-check">${isActive ? '&#10003;' : ''}</span><span>${quality}</span>`;
       option.addEventListener('click', () => {
         this.state.quality = quality;
         this.options.onQualityChange?.(quality);

@@ -328,7 +328,7 @@ export const STYLES = `
   bottom: 100%;
   right: 0;
   margin-bottom: 4px;
-  min-width: 100px;
+  min-width: 140px;
   background: var(--ss-bg);
   border: 1px solid var(--ss-border);
   border-radius: 6px;
@@ -338,6 +338,7 @@ export const STYLES = `
   visibility: hidden;
   transform: translateY(8px);
   transition: var(--ss-transition);
+  z-index: 20;
 }
 
 .ss-quality-menu.ss-open {
@@ -347,7 +348,9 @@ export const STYLES = `
 }
 
 .ss-quality-option {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: 100%;
   padding: 8px 12px;
   background: transparent;
@@ -357,6 +360,14 @@ export const STYLES = `
   text-align: left;
   cursor: pointer;
   transition: var(--ss-transition);
+  white-space: nowrap;
+}
+
+.ss-quality-check {
+  width: 14px;
+  font-size: 11px;
+  color: var(--ss-primary);
+  flex-shrink: 0;
 }
 
 .ss-quality-option:hover {

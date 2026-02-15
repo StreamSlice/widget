@@ -143,7 +143,8 @@ export class IVSPlayerWrapper {
 
     this.player.addEventListener(PlayerEventType.QUALITY_CHANGED, () => {
       const quality = this.player.getQuality();
-      this.options.onStateChange?.({ quality: quality?.name || 'auto' });
+      const label = quality ? this.formatQualityLabel(quality) : 'Auto';
+      this.options.onStateChange?.({ quality: label });
     });
   }
 
@@ -240,24 +241,38 @@ export class IVSPlayerWrapper {
     this.setMuted(!isMuted);
   }
 
-  public setQuality(quality: string): void {
+  public setQuality(qualityLabel: string): void {
     if (!this.player) return;
-    
-    const qualities = this.player.getQualities();
-    const selectedQuality = qualities.find((q: any) => q.name === quality);
-    
-    if (selectedQuality) {
-      this.player.setQuality(selectedQuality);
-    } else if (quality === 'auto' || quality === 'Auto') {
+
+    if (qualityLabel === 'Auto') {
       this.player.setAutoQualityMode(true);
+      return;
+    }
+
+    const qualities = this.player.getQualities();
+    const selectedQuality = qualities.find((q: any) => this.formatQualityLabel(q) === qualityLabel);
+
+    if (selectedQuality) {
+      this.player.setAutoQualityMode(false);
+      this.player.setQuality(selectedQuality);
     }
   }
 
   public getQualities(): string[] {
     if (!this.player) return ['Auto'];
-    
+
     const qualities = this.player.getQualities();
-    return ['Auto', ...qualities.map((q: any) => q.name)];
+    return ['Auto', ...qualities.map((q: any) => this.formatQualityLabel(q))];
+  }
+
+  private formatQualityLabel(quality: any): string {
+    const height = quality.height;
+    const fps = quality.framerate ? Math.round(quality.framerate) : null;
+    let label = height ? `${height}p` : quality.name;
+    if (fps && fps > 30) {
+      label += `${fps}`;
+    }
+    return label;
   }
 
   private updateQualities(): void {
