@@ -1,7 +1,7 @@
 {
   "name": "@streamslice/widget",
   "type": "module",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Floating video player widget with Amazon IVS support",
   "main": "dist/streamslice.js",
   "module": "dist/streamslice.esm.js",
